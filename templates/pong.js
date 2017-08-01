@@ -2,11 +2,12 @@
 
 class Board{ //Class board == the background
     
-    constructor(width, height, x, y){
+    constructor( x, y, width, height) {
         this.w = width;
         this.h = height;
         this.x = x;
         this.y = y;
+        this.color = "#4286f4";
         this.context;
     }
      
@@ -20,10 +21,16 @@ class Board{ //Class board == the background
         ctx = canvas.getContext('2d');
         $('body').append(canvas);
         
-        ctx.fillStyle = color;
+        ctx.fillStyle = this.color;
+    
         ctx.fillRect(this.x , this.y, this.w, this.h);
         
         return ctx; //returns the context where the board is created  
+    }
+    
+    show() {
+        var color = this.color;
+        this.initBoard(color);
     }
     
      delete(){ //destroy element out of the screen
@@ -41,6 +48,7 @@ class Player{
         this.w = w_;
         this.h = h_;
         this.speed;
+        this.color = "#fff";;
         this.score = 0;
     }
     
@@ -64,7 +72,7 @@ class Player{
     
     keyEventHandler(){ //player follows keymouvement
         var up = 40, down = 38;
-
+        
         document.addEventListener("keydown", event => {
             if(event.keyCode == up)
                 this.y += 30;
@@ -74,7 +82,7 @@ class Player{
     }
     
     show(){
-        var color = "#fff"; //color of player
+        var color = this.color; //color of player
         this.initPlayer(board.context, color); 
     }
     
@@ -91,6 +99,7 @@ class Ball { //Ball object
         this.x = x_;
         this.y = y_;
         this.context;
+        this.color = "#fff";
         this.radius = 20;
         this.xspeed = 700 * (Math.random() > 0.5 ? 1 : -1);
         this.yspeed = 700;
@@ -111,13 +120,12 @@ class Ball { //Ball object
     }
 
     show(){ //prints the ball in the screen 
-        var color = "#fff"; //color of ball --> white
+        var color = this.color; //color of ball --> white
         var canvas = $('canvas')[0];
         var ctx = canvas.getContext('2d');
-        
         this.context = ctx;
         
-        ctx.fillStyle = color;
+        ctx.fillStyle = this.color;
         
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0,2 * Math.PI);
@@ -164,15 +172,15 @@ class Ball { //Ball object
 function createboard() { //Function that create a new board
     var color;
     
-    const w = screen.width * 0.9;
-    const h = screen.height * 0.88;
-    const x = screen.width/2 - w/2;
-    const y = screen.height/2 - h/2;
+    const w = screen.width * 0.7;
+    const h = screen.height * 0.75;
+    const x = 30;
+    const y = 30;
 
-    color = "#4286f4"; //color of board --> blue
+    //color = "#4286f4"; //color of board --> blue
     
-    var board = new Board(w, h, x, y); //Class board
-    var ctx = board.initBoard(color); //initBoard returns a context
+    var board = new Board(x, y, w, h); //Class board
+    var ctx = board.initBoard(board.color); //initBoard returns a context
     board.context = ctx;
     
     return board;
@@ -184,7 +192,8 @@ function createPlayer(board, x, y, w, h) {
     color = "#fff"; //color of player
     
     player = new Player(x, y, w, h);
-    player.initPlayer(board.context, color);
+    player.color = color;
+    player.initPlayer(board.context, player.color);
     
     return player;
 }
@@ -231,7 +240,7 @@ function update(difftime){
     player2.delete();
     pong.delete();
     
-    createboard();
+    board.show();
     printScore();
     player1.show();
     player2.show();
