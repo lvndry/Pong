@@ -1,4 +1,7 @@
-/*INIT *OF ELEMENTS */
+/*Landry Monga
+  Pong game
+  August 2017
+*/
 
 class Board{ //Class board == the background
     
@@ -140,15 +143,12 @@ class Ball { //Ball object
     }
     
     collide(){ //checks if the ball hits a paddle
-        //console.log('player y : ' + player.y + 'pong y : ' + this.y);
         if((this.upperside > player1.y - 50) && (this.bottom) < (player1.y + player1.h + 50) && (this.leftside) < (player1.x + player1.w)){ //if the ball goes left and is after the bar
-        //console.log('Left : rebond');
             this.xspeed += 50;
             this.yspeed += 50;
             this.xspeed *= -1; //change direction
         }
         if ((this.upperside > player2.y - 50) && (this.bottom) < (player2.y + player2.h + 50) && (this.rigthside) > (player2.x - player2.w/2)){
-            //console.log('Right : rebond');
             this.xspeed += 50;
             this.yspeed += 50;
             this.xspeed *= -1;
@@ -161,13 +161,6 @@ class Ball { //Ball object
         delete namespace.this;
     }
 }
-
-/*function repere(){
-    var canvas = $('canvas')[0];
-    var context = canvas.getContext('2d');
-    context.fillStyle = "#FF0000"; //red
-    context.fillRect(pong.x - pong.radius, pong.y, 10, 10);
-}*/
 
 function createboard() { //Function that create a new board
     var color;
@@ -205,7 +198,6 @@ function score(){ //if the ball is above a paddle the other paddle get a point a
     }
     
     if(pong.x > player2.x + player2.w/2){
-        //console.log(board.w);
         player1.score++;
         pong.reset();
     }
@@ -215,7 +207,6 @@ function printScore() { //prints the score
     var canvas = $('canvas')[0];
     var context = canvas.getContext('2d');
     var score = "Player 1 : " + player1.score + " - " + player2.score + " : Player 2";
-    //console.log(score);
     context.font = "50px Arial";
     context.fillStyle = "#fff";
     context.fillText(score, board.w/2 - 180, board.y + 50);
@@ -246,6 +237,7 @@ function update(difftime){
     player2.show();
     
     pong.show();
+    
     score();
 }
 

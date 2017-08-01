@@ -1,6 +1,11 @@
+/*Landry Monga
+  Pong game
+  August 2017
+*/
+
 .toolbox {
-    background: black;
-    color: azure;
+    background: white;
+    color: burlywood;
     position : absolute;
     float : right;
     padding: 2%;
