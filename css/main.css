@@ -2,6 +2,10 @@
   Pong game
   August 2017
 */
+html, body{
+    height: 100%;
+    margin: 0;
+}
 
 .toolbox {
     background: white;
@@ -12,4 +16,24 @@
     width: 250px;
     left: 75%;
     top : 15%;
+}
+
+#menu {
+    text-align: center;
+    font-size: 10em;
+    vertical-align: baseline;
+    position: fixed;
+    top : 2.5em;
+    left : 3.5em;
+    color : white;
+    display: none;
+}
+
+#menu p:last-child {
+    margin-top: 1em;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
 }

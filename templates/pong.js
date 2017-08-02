@@ -3,6 +3,12 @@
   August 2017
 */
 
+(function () { //requestAnimationFrame is chosen depending on the browser
+    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame;
+})();
+            
+
 class Board{ //Class board == the background
     
     constructor( x, y, width, height) {
@@ -139,19 +145,23 @@ class Ball { //Ball object
         this.x = board.w/2;
         this.y = board.h/2;
         this.xspeed = 600 * ((Math.random() > .5) ? 1 : -1);
-        this.yspeed = 600;
+        this.yspeed = 600 * ((Math.random() > .5) ? 1 : -1);
     }
     
     collide(){ //checks if the ball hits a paddle
         if((this.upperside > player1.y - 50) && (this.bottom) < (player1.y + player1.h + 50) && (this.leftside) < (player1.x + player1.w)){ //if the ball goes left and is after the bar
-            this.xspeed += 50;
-            this.yspeed += 50;
+            this.xspeed += 50; //speed up
+            this.yspeed += 50; //speed up
             this.xspeed *= -1; //change direction
         }
         if ((this.upperside > player2.y - 50) && (this.bottom) < (player2.y + player2.h + 50) && (this.rigthside) > (player2.x - player2.w/2)){
             this.xspeed += 50;
             this.yspeed += 50;
             this.xspeed *= -1;
+        }
+        
+        if(pong.y - pong.radius < board.y + 10 || pong.y + pong.radius > board.h){ //if it hits the bottom or the top of the screen
+            pong.yspeed *= -1;
         }
      }
     
@@ -169,8 +179,6 @@ function createboard() { //Function that create a new board
     const h = screen.height * 0.75;
     const x = 30;
     const y = 30;
-
-    //color = "#4286f4"; //color of board --> blue
     
     var board = new Board(x, y, w, h); //Class board
     var ctx = board.initBoard(board.color); //initBoard returns a context
@@ -209,17 +217,13 @@ function printScore() { //prints the score
     var score = "Player 1 : " + player1.score + " - " + player2.score + " : Player 2";
     context.font = "50px Arial";
     context.fillStyle = "#fff";
-    context.fillText(score, board.w/2 - 180, board.y + 50);
+    context.fillText(score, board.w/2 - 210, board.y + 50);
 }
 
 function update(difftime){
     
     var canvas = $('canvas')[0];
-    
-    if(pong.y - pong.radius < board.y + 10 || pong.y + pong.radius > board.h){
-        pong.yspeed *= -1;
-    }
-
+  
     pong.collide();
   
     pong.x += pong.xspeed * difftime;
@@ -243,8 +247,8 @@ function update(difftime){
 
 let lastime;
 function callback(time){
-    if(lastime)
+    if(lastime && pause != true)
         update((time - lastime) /1000);
     lastime = time;
-    requestAnimationFrame(callback);
+    window.requestAnimationFrame(callback);    
 }
