@@ -112,6 +112,7 @@ class Ball { //Ball object
         this.radius = 20;
         this.xspeed = 700 * (Math.random() > 0.5 ? 1 : -1);
         this.yspeed = 700;
+        this.dead = false;
     }
     
     //getter for coordonates of the ball
@@ -159,9 +160,8 @@ class Ball { //Ball object
             this.yspeed += 50;
             this.xspeed *= -1;
         }
-        
-        if(pong.y - pong.radius < board.y + 10 || pong.y + pong.radius > board.h){ //if it hits the bottom or the top of the screen
-            pong.yspeed *= -1;
+        if(this.y - this.radius < board.y + 10 || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
+            this.yspeed *= -1;
         }
      }
     
@@ -200,14 +200,31 @@ function createPlayer(board, x, y, w, h) {
 }
 
 function score(){ //if the ball is above a paddle the other paddle get a point and the ball goes to the center
-    if(pong.x < player1.x){
-        player2.score++;
-        pong.reset();
+    for(var  i = 0; i < balls.length; i++){
+        if(balls[i].dead === false){
+            
+            if(balls[i].x < player1.x){
+                player2.score++;
+                balls[i].dead = true;
+            }
+        
+            if(balls[i].x > player2.x + player2.w/2){
+                player1.score++;
+                balls[i].dead = true;
+            }
+        }
     }
-    
-    if(pong.x > player2.x + player2.w/2){
-        player1.score++;
-        pong.reset();
+}
+
+function reseter(){
+    for(var i = 0, len = balls.length; i < len; i++){
+        if(balls[i].dead === false)
+            return;
+    }
+    for(var i = 0, len = balls.length; i < len; i++){
+        balls[i].reset();
+        balls[i].dead = false;
+        balls[i].show();
     }
 }
 
@@ -221,28 +238,33 @@ function printScore() { //prints the score
 }
 
 function update(difftime){
-    
-    var canvas = $('canvas')[0];
-  
-    pong.collide();
-  
-    pong.x += pong.xspeed * difftime;
-    pong.y += pong.yspeed * difftime;
-    
+    for(var i = 0; i < balls.length; i++){
+        balls[i].collide();
+        
+        balls[i].x += balls[i].xspeed * difftime;
+        balls[i].y += balls[i].yspeed * difftime;
+    }
+
     //free memory before creating new objects
     board.delete();
     player1.delete();
     player2.delete();
-    pong.delete();
+    
+    for(var i = 0; i < balls.length; i++)
+        balls[i].delete();
     
     board.show();
     printScore();
     player1.show();
     player2.show();
-    
-    pong.show();
+    for(var i = 0; i < balls.length; i++){
+        if(balls[i].dead === false)
+            balls[i].show();
+        //console.log(i + ' : ' + balls[i]);
+    }
     
     score();
+    reseter();
 }
 
 let lastime;

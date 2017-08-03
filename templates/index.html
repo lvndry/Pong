@@ -65,6 +65,10 @@
                           <option value="ffcc00">Yellow</option>
                           <option value ="2eb82e">Green</option>
                       </select>
+                </div> <br>
+                <div id="numBall"  onchange="createBalls();">
+                    <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked>
+                    <label for="second">2</label><input type="radio" value="2"  name="ball" id="second">
                 </div>
             </div>
         </aside> 
@@ -86,8 +90,19 @@
             x = board.w - (board.x + 15);
             y = board.h/2 - (2 * board.y);
             player2 = createPlayer(board, x, y, w, h);
-
-            var pong = new Ball(board.w/2, board.h/2);
+            
+            var balls = [];
+            
+            function createBalls(){
+                var pong;
+                balls = []; //I make sure that the array is empty before creating the wanted number of balls
+                var numOfBalls = $('input[name=ball]:checked').val();
+                
+                for(var i = 0; i < numOfBalls; i++){
+                    pong = new Ball(board.w/2, board.h/2);
+                    balls[i] = pong;
+                }
+            }
        
             document.addEventListener("keydown", event =>{
             
@@ -102,7 +117,7 @@
                 }
             }
         })
-          
+        createBalls();
         callback();
                 
         player1.mouseEventHandler();
