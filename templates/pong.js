@@ -101,7 +101,6 @@ class Player{
     addScore(){
         this.score += 1;
     }
-    
 }
 
 class Ball { //Ball object
@@ -115,7 +114,7 @@ class Ball { //Ball object
         this.xspeed = 700 * (Math.random() > 0.5 ? 1 : -1);
         this.yspeed = 700;
         this.dead = false;
-        this.lastshooter;
+        this.lastshooter = player1;
     }
     
     //getter for coordonates of the ball
@@ -169,15 +168,32 @@ class Ball { //Ball object
         if(this.y - this.radius < board.y + 10 || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
             this.yspeed *= -1;
         }
-        //if(this.upperside > bonus.y && this.bottom < this.y + 64 && this.leftside < bonus.x && (this.leftside < bonus.x || this.rigthside > bonus.x + 64))
-        if(Math.abs(this.x - bonus.x) < this.radius && Math.abs(this.y - bonus.y) < this.radius)
-           bonus.destroyed = true;
+        if(Math.abs(this.x - bonus.x) <= this.radius && Math.abs(this.y - bonus.y) <= this.radius){ //if the distance beetween the center of the circle and the object is lower than the radus of the circle it means that the objects collides
+            bonus.destroyed = true;
+            this.giveBonus();
+            return true;
+        }
      }
     
     delete(){ //destroy the ball out of the screen
         var namespace = {};
         namespace.this = {};
         delete namespace.this;
+    }
+    
+    setFunctions(){
+        bonusFunctions.push((this.lastshooter).extend);
+        bonusFunctions.push((this.lastshooter).addScore);
+    }
+    
+    getBonus(){
+        var bonusIndex = Math.floor(Math.random() * bonusFunctions.length); 
+        return bonusFunctions[bonusIndex];  
+    }
+    
+    giveBonus(){
+        var selectedBonus = this.getBonus();
+        (this.lastshooter).selectedBonus;
     }
 }
 
@@ -202,7 +218,7 @@ class bonusCase {
     
     show(){
         var ctx, image, pattern;
-        console.log('x : ' + this.x + 'y : ' + this.y);
+
         ctx = board.context;
         image = new Image();
         image.src='../star.png';
@@ -212,7 +228,6 @@ class bonusCase {
         ctx.translate(this.x, this.y);
         ctx.fill();
     }
-    
     
     delete(){
         var namespace = {};

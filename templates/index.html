@@ -80,7 +80,8 @@
             var player1, player2;   //==> paddles
             var pause = false;  //says if the game stops or not
             var balls = []; //array of ball
-    
+            var bonusFunctions = [];
+            
             w = 30;
             h = board.h * 0.3;
             x = board.x + 15;
@@ -105,9 +106,9 @@
                     }
                 }
             })
-            
             var bonus = new bonusCase(); //new bonus case
             createBalls();
+            balls[0].setFunctions();
             bonus.init();
             bonus.show();
             game();
