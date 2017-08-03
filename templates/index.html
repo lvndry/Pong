@@ -26,8 +26,9 @@
               <p>||</p>
 
         </div>
+        <img src="../star.png" alt="bonus" id="bonus-img" hidden>
         <canvas class="game"> </canvas>
-
+    
         <aside class="toolbox">
             <div class="color">
                 <h2>Color</h2>
@@ -46,7 +47,7 @@
                     
                     <div class="pong">
                         <label>Ball</label>
-                        <select  onchange="pong.color = '#' + this.value;">
+                        <select  onchange="ballColor(this.value);">
                           <option value="fff" selected>White</option>
                           <option value="e60000">Red</option>
                           <option value="4286f4">Blue</option>
@@ -74,54 +75,45 @@
         </aside> 
                  
         <script>
-            var board = createboard();
-            var pause = false;
-            var x, y, w, h; //coordinates of players
-            var player1, player2; //players
-
+            var board = createboard();  //creation of the board === the background
+            var x, y, w, h, min_x, max_x, min_y, max_y; //coordonates of players
+            var player1, player2;   //==> paddles
+            var pause = false;  //says if the game stops or not
+            var balls = []; //array of ball
+    
             w = 30;
             h = board.h * 0.3;
             x = board.x + 15;
             y = board.h/2 - (2 * board.y);
-            player1 = createPlayer(board, x, y, w, h);
+            player1 = createPlayer(board, x, y, w, h);  //creation of letf player 
 
             w = 30;
             h = board.h * 0.3;
             x = board.w - (board.x + 15);
             y = board.h/2 - (2 * board.y);
-            player2 = createPlayer(board, x, y, w, h);
+            player2 = createPlayer(board, x, y, w, h);  //creation of right player
             
-            var balls = [];
+            document.addEventListener("keydown", event =>{ //Stops the game if spacebar is pressed
+                if(event.keyCode == "32"){
+                    if($("#menu").css('display') == 'block'){
+                        $("#menu").hide();
+                        pause = false;
+                    }
+                    else {
+                        $("#menu").show();
+                        pause = true;
+                    }
+                }
+            })
             
-            function createBalls(){
-                var pong;
-                balls = []; //I make sure that the array is empty before creating the wanted number of balls
-                var numOfBalls = $('input[name=ball]:checked').val();
+            var bonus = new bonusCase(); //new bonus case
+            createBalls();
+            bonus.init();
+            bonus.show();
+            game();
                 
-                for(var i = 0; i < numOfBalls; i++){
-                    pong = new Ball(board.w/2, board.h/2);
-                    balls[i] = pong;
-                }
-            }
-       
-            document.addEventListener("keydown", event =>{
-            
-            if(event.keyCode == "32"){
-                if($("#menu").css('display') == 'block'){
-                    $("#menu").hide();
-                    pause = false;
-                }
-                else {
-                    $("#menu").show();
-                    pause = true;
-                }
-            }
-        })
-        createBalls();
-        callback();
-                
-        player1.mouseEventHandler();
-        player2.keyEventHandler();
+            player1.mouseEventHandler();
+            player2.keyEventHandler();
             
          </script>
          

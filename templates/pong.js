@@ -24,16 +24,14 @@ class Board{ //Class board == the background
         var canvas, ctx;
         
         canvas = $('canvas')[0];
+        ctx = canvas.getContext('2d');
+        this.context = ctx;
+        
         canvas.width = this.w;
         canvas.height  = this.h;
-
-        ctx = canvas.getContext('2d');
-        $('body').append(canvas);
         
         ctx.fillStyle = this.color;
-    
         ctx.fillRect(this.x , this.y, this.w, this.h);
-        
         return ctx; //returns the context where the board is created  
     }
     
@@ -62,13 +60,8 @@ class Player{
     }
     
     initPlayer(context, color){
-        var canvas, context;
-        
-        canvas = $('canvas')[0];
-        context = canvas.getContext('2d');
         context.fillStyle = color;
         context.fillRect(this.x, this.y, this.w, this.h);
-        $('canvas').append(canvas);
     }
     
     mouseEventHandler() {  //player follows mouse mouvements
@@ -100,6 +93,15 @@ class Player{
         namespace.this = {};
         delete namespace.this;
     }
+    
+    extend(){
+        this.h += 50;
+    }
+    
+    addScore(){
+        this.score += 1;
+    }
+    
 }
 
 class Ball { //Ball object
@@ -113,6 +115,7 @@ class Ball { //Ball object
         this.xspeed = 700 * (Math.random() > 0.5 ? 1 : -1);
         this.yspeed = 700;
         this.dead = false;
+        this.lastshooter;
     }
     
     //getter for coordonates of the ball
@@ -140,6 +143,7 @@ class Ball { //Ball object
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0,2 * Math.PI);
         ctx.fill();
+        ctx.closePath();
     }
     
     reset(){ //get the ball in the center of the screen
@@ -151,11 +155,13 @@ class Ball { //Ball object
     
     collide(){ //checks if the ball hits a paddle
         if((this.upperside > player1.y - 50) && (this.bottom) < (player1.y + player1.h + 50) && (this.leftside) < (player1.x + player1.w)){ //if the ball goes left and is after the bar
+            this.lastshooter = player1;
             this.xspeed += 50; //speed up
             this.yspeed += 50; //speed up
             this.xspeed *= -1; //change direction
         }
         if ((this.upperside > player2.y - 50) && (this.bottom) < (player2.y + player2.h + 50) && (this.rigthside) > (player2.x - player2.w/2)){
+            this.lastshooter = player2;
             this.xspeed += 50;
             this.yspeed += 50;
             this.xspeed *= -1;
@@ -163,12 +169,55 @@ class Ball { //Ball object
         if(this.y - this.radius < board.y + 10 || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
             this.yspeed *= -1;
         }
+        //if(this.upperside > bonus.y && this.bottom < this.y + 64 && this.leftside < bonus.x && (this.leftside < bonus.x || this.rigthside > bonus.x + 64))
+        if(Math.abs(this.x - bonus.x) < this.radius && Math.abs(this.y - bonus.y) < this.radius)
+           bonus.destroyed = true;
      }
     
     delete(){ //destroy the ball out of the screen
         var namespace = {};
         namespace.this = {};
         delete namespace.this;
+    }
+}
+
+class bonusCase {
+    constructor(){
+        this.x;
+        this.y;
+        this.w  = 69;
+        this.h = 69;
+        this.color = '#963108';
+        this.destroyed = false;
+    }
+    
+    init(){
+        min_x = player1.x + player1.w + 50; //the bonus can't be more in the left than the left of the board
+        max_x = player2.x - 50; //bonus case can't be more in the right than the right of the board
+        min_y = board.y + 20; //bonus case can't be higher than the top of screen
+        max_y = board.y + board.h - 50; //bonus case can't be lower than the bottom of the screen
+        this.x = Math.random() * (max_x - min_x) + min_x; //random x position of bonus case 
+        this.y = Math.random() * (max_y - min_y) + min_y; //random y position of bonus case
+    }
+    
+    show(){
+        var ctx, image, pattern;
+        console.log('x : ' + this.x + 'y : ' + this.y);
+        ctx = board.context;
+        image = new Image();
+        image.src='../star.png';
+        pattern = ctx.createPattern(image, "no-repeat");
+        ctx.fillStyle = pattern;
+        ctx.rect(0, 0, board.w + board.x, board.h + board.y); //ctx.rext do not accept vriables. So that why I use translate
+        ctx.translate(this.x, this.y);
+        ctx.fill();
+    }
+    
+    
+    delete(){
+        var namespace = {};
+        namespace.this = {};
+        delete namespace.this; 
     }
 }
 
@@ -183,7 +232,7 @@ function createboard() { //Function that create a new board
     var board = new Board(x, y, w, h); //Class board
     var ctx = board.initBoard(board.color); //initBoard returns a context
     board.context = ctx;
-    
+
     return board;
 }
 
@@ -198,6 +247,17 @@ function createPlayer(board, x, y, w, h) {
     
     return player;
 }
+
+function createBalls(){
+    var pong;
+    balls = []; //I make sure that the array is empty before creating the wanted number of balls
+    var numOfBalls = $('input[name=ball]:checked').val();
+                
+    for(var i = 0; i < numOfBalls; i++){
+        pong = new Ball(board.w/2, board.h/2);
+        balls[i] = pong;
+    }
+}  
 
 function score(){ //if the ball is above a paddle the other paddle get a point and the ball goes to the center
     for(var  i = 0; i < balls.length; i++){
@@ -214,6 +274,11 @@ function score(){ //if the ball is above a paddle the other paddle get a point a
             }
         }
     }
+}
+
+function ballColor(newColor){
+        for(var i = 0; i < balls.length; i++)
+            balls[i].color = "#" + newColor;
 }
 
 function reseter(){
@@ -260,17 +325,17 @@ function update(difftime){
     for(var i = 0; i < balls.length; i++){
         if(balls[i].dead === false)
             balls[i].show();
-        //console.log(i + ' : ' + balls[i]);
     }
-    
+    if(bonus.destroyed === false)
+        bonus.show();
     score();
     reseter();
 }
 
 let lastime;
-function callback(time){
+function game(time){
     if(lastime && pause != true)
         update((time - lastime) /1000);
     lastime = time;
-    window.requestAnimationFrame(callback);    
+    window.requestAnimationFrame(game);    
 }
