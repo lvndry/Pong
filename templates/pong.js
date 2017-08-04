@@ -84,24 +84,6 @@ class Player{
         })
     }
     
-    predict(){
-        
-            /*if(balls[i].xspeed > 0){
-                while(balls[i].y > this.y){
-                    this.y += 20;
-                }
-                while(balls[i].y < this.y){
-                    this.y -=20; 
-                }
-            }*/
-            this.y = balls[0].y;
-}    
-    
-    
-    IA(){
-            this.predict();
-        }    
-        
     show(){
         var color = this.color; //color of player
         this.initPlayer(board.context, color); 
@@ -163,20 +145,21 @@ class Ball { //Ball object
     collide(){ //checks if the ball hits a paddle
         if((this.upperside > player1.y - 50) && (this.bottom) < (player1.y + player1.h + 50) && (this.leftside) < (player1.x + player1.w)){ //if the ball goes left and is after the bar
             this.lastshooter = player1;
-            this.xspeed += 50; //speed up
-            this.yspeed += 50; //speed up
+            this.xspeed += 80; //speed up
+            this.yspeed += 80; //speed up
             this.xspeed *= -1; //change direction
         }
         if ((this.upperside > player2.y - 50) && (this.bottom) < (player2.y + player2.h + 50) && (this.rigthside) > (player2.x - player2.w/2)){
             this.lastshooter = player2;
-            this.xspeed += 50;
-            this.yspeed += 50;
+            this.xspeed += 80;
+            this.yspeed += 80;
             this.xspeed *= -1;
         }
-        if(this.y - this.radius < board.y + 10 || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
+        if(this.y - this.radius < (board.y + 10) || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
             this.yspeed *= -1;
         }
-        if(Math.abs(this.x - bonus.x) <= this.radius && Math.abs(this.y - bonus.y) <= this.radius && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the radus of the circle it means that the objects collides
+    
+        if((Math.abs(this.x - bonus.x) <= 64 || Math.abs(this.x - bonus.x - 64) <= 64) && (Math.abs(this.y - bonus.y) <= 64 || Math.abs(this.y - bonus.y + 64) <= 64) && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the radus of the circle it means that the objects collides
             bonus.destroyed = true;
             this.giveBonus();
             return true;
@@ -268,7 +251,7 @@ function extend(shooter){
     shooter.h *= 2;
     setTimeout(function(){
         shooter.h /= 2;
-    }, 60 * 1000)
+    }, 30 * 1000) //The lenght is doubled during 30 seconds 
 }
     
 function addScore(shooter){
@@ -356,7 +339,7 @@ function update(difftime){
         setTimeout(function () {
             bonus.init();
             bonus.destroyed = false;
-        }, 3000)
+        }, 1000 * 120) //after 2 minutes
     }
     //free memory before creating new objects
     board.delete();
