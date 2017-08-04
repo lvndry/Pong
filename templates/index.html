@@ -66,11 +66,16 @@
                           <option value="ffcc00">Yellow</option>
                           <option value ="2eb82e">Green</option>
                       </select>
-                </div> <br>
-                <div id="numBall"  onchange="createBalls();">
-                    <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked>
-                    <label for="second">2</label><input type="radio" value="2"  name="ball" id="second">
-                </div>
+                </div> 
+            </div>
+            
+            <div id="numBall" onchange="createBalls();">
+                <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked>
+                <label for="second">2</label><input type="radio" value="2"  name="ball" id="second">
+            </div>
+            <div onchange="player2Mode();">
+                <label>Human vs Human</label><input type="radio" value="H" name="mode" checked>
+                <label>Human vs IA</label><input type="radio" value="I" name="mode">
             </div>
         </aside> 
                  
@@ -116,7 +121,27 @@
             game();
                 
             player1.mouseEventHandler();
-            player2.keyEventHandler();
+            
+            function player2Mode(){
+                var gameMode = $('input[name=mode]:checked').val();
+                console.log('GameMode : ' + gameMode);
+                if(gameMode === 'H'){
+                    player2.bot = false;
+                    player2.keyEventHandler();
+                }
+                else if(gameMode === 'I'){
+                    player2.bot = true;
+                        if(balls[0].xspeed > 0){
+                            if(player2.y < balls[0].y)
+                                player2.y += 4;
+                            if(player2.y > balls[0].y)
+                                player2.y -= 4;
+                        
+                    }
+                }
+            }
+            player2Mode();
+        
             
          </script>
          

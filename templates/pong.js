@@ -55,6 +55,7 @@ class Player{
         this.w = w_;
         this.h = h_;
         this.speed;
+        this.bot = false;
         this.color = "#fff";;
         this.score = 0;
     }
@@ -83,6 +84,24 @@ class Player{
         })
     }
     
+    predict(){
+        
+            /*if(balls[i].xspeed > 0){
+                while(balls[i].y > this.y){
+                    this.y += 20;
+                }
+                while(balls[i].y < this.y){
+                    this.y -=20; 
+                }
+            }*/
+            this.y = balls[0].y;
+}    
+    
+    
+    IA(){
+            this.predict();
+        }    
+        
     show(){
         var color = this.color; //color of player
         this.initPlayer(board.context, color); 
@@ -174,7 +193,6 @@ class Ball { //Ball object
         bonusFunctions = [];
         bonusFunctions.push(extend);
         bonusFunctions.push(addScore);
-        console.log(bonusFunctions);
     }
     
     getBonus(){
@@ -187,8 +205,6 @@ class Ball { //Ball object
         var selectedBonus;
         
         selectedBonus = this.getBonus();
-        console.log('selectedBonus : ' + selectedBonus);
-        console.log('lastshooter : ' + this.lastshooter);
         var lastshooter = this.lastshooter;
         selectedBonus(lastshooter);
     }
@@ -332,6 +348,9 @@ function update(difftime){
         balls[i].x += balls[i].xspeed * difftime;
         balls[i].y += balls[i].yspeed * difftime;
     }
+    
+    if(player2.bot === true)
+        player2Mode();
     //If the bonus is given an other is placed after 3 seconds
     if(bonus.destroyed === true){
         setTimeout(function () {
