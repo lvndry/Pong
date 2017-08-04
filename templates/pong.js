@@ -93,14 +93,6 @@ class Player{
         namespace.this = {};
         delete namespace.this;
     }
-    
-    extend(){
-        this.h += 50;
-    }
-    
-    addScore(){
-        this.score += 1;
-    }
 }
 
 class Ball { //Ball object
@@ -108,13 +100,12 @@ class Ball { //Ball object
     constructor(x_, y_){
         this.x = x_;
         this.y = y_;
-        this.context;
-        this.color = "#fff";
-        this.radius = 20;
         this.xspeed = 700 * (Math.random() > 0.5 ? 1 : -1);
         this.yspeed = 700;
-        this.dead = false;
+        this.radius = 20;
+        this.color = "#fff";
         this.lastshooter = player1;
+        this.dead = false;
     }
     
     //getter for coordonates of the ball
@@ -132,14 +123,12 @@ class Ball { //Ball object
     }
 
     show(){ //prints the ball in the screen 
-        var color = this.color; //color of ball --> white
+        
         var canvas = $('canvas')[0];
         var ctx = canvas.getContext('2d');
-        this.context = ctx;
-        
-        ctx.fillStyle = this.color;
         
         ctx.beginPath();
+        ctx.fillStyle = this.color; //color of ball --> white
         ctx.arc(this.x, this.y, this.radius, 0,2 * Math.PI);
         ctx.fill();
         ctx.closePath();
@@ -168,7 +157,7 @@ class Ball { //Ball object
         if(this.y - this.radius < board.y + 10 || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
             this.yspeed *= -1;
         }
-        if(Math.abs(this.x - bonus.x) <= this.radius && Math.abs(this.y - bonus.y) <= this.radius){ //if the distance beetween the center of the circle and the object is lower than the radus of the circle it means that the objects collides
+        if(Math.abs(this.x - bonus.x) <= this.radius && Math.abs(this.y - bonus.y) <= this.radius && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the radus of the circle it means that the objects collides
             bonus.destroyed = true;
             this.giveBonus();
             return true;
@@ -182,18 +171,26 @@ class Ball { //Ball object
     }
     
     setFunctions(){
-        bonusFunctions.push((this.lastshooter).extend);
-        bonusFunctions.push((this.lastshooter).addScore);
+        bonusFunctions = [];
+        bonusFunctions.push(extend);
+        bonusFunctions.push(addScore);
+        console.log(bonusFunctions);
     }
     
     getBonus(){
+        this.setFunctions();
         var bonusIndex = Math.floor(Math.random() * bonusFunctions.length); 
         return bonusFunctions[bonusIndex];  
     }
     
     giveBonus(){
-        var selectedBonus = this.getBonus();
-        (this.lastshooter).selectedBonus;
+        var selectedBonus;
+        
+        selectedBonus = this.getBonus();
+        console.log('selectedBonus : ' + selectedBonus);
+        console.log('lastshooter : ' + this.lastshooter);
+        var lastshooter = this.lastshooter;
+        selectedBonus(lastshooter);
     }
 }
 
@@ -249,6 +246,17 @@ function createboard() { //Function that create a new board
     board.context = ctx;
 
     return board;
+}
+
+function extend(shooter){
+    shooter.h *= 2;
+    setTimeout(function(){
+        shooter.h /= 2;
+    }, 60 * 1000)
+}
+    
+function addScore(shooter){
+    shooter.score += 1;
 }
 
 function createPlayer(board, x, y, w, h) {
@@ -324,7 +332,13 @@ function update(difftime){
         balls[i].x += balls[i].xspeed * difftime;
         balls[i].y += balls[i].yspeed * difftime;
     }
-
+    //If the bonus is given an other is placed after 3 seconds
+    if(bonus.destroyed === true){
+        setTimeout(function () {
+            bonus.init();
+            bonus.destroyed = false;
+        }, 3000)
+    }
     //free memory before creating new objects
     board.delete();
     player1.delete();
