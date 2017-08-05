@@ -145,14 +145,14 @@ class Ball { //Ball object
     collide(){ //checks if the ball hits a paddle
         if((this.upperside > player1.y - 50) && (this.bottom) < (player1.y + player1.h + 50) && (this.leftside) < (player1.x + player1.w)){ //if the ball goes left and is after the bar
             this.lastshooter = player1;
-            this.xspeed += 80; //speed up
-            this.yspeed += 80; //speed up
+            this.xspeed *= 1.1; //speed up by 10%
+            this.yspeed *= 1.1; //speed up
             this.xspeed *= -1; //change direction
         }
         if ((this.upperside > player2.y - 50) && (this.bottom) < (player2.y + player2.h + 50) && (this.rigthside) > (player2.x - player2.w/2)){
             this.lastshooter = player2;
-            this.xspeed += 80;
-            this.yspeed += 80;
+            this.xspeed *= 1.1;
+            this.yspeed *= 1.1;
             this.xspeed *= -1;
         }
         if(this.y - this.radius < (board.y + 10) || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
@@ -298,9 +298,31 @@ function score(){ //if the ball is above a paddle the other paddle get a point a
     }
 }
 
+function showElements(){
+    board.show();
+    player1.show();
+    player2.show();
+    
+    for(var i = 0; i < balls.length; i++)
+        balls[i].show();
+}
+
+function boardColor(newColor){
+    board.color = "#" + newColor;
+    showElements();
+    
+}
+
 function ballColor(newColor){
         for(var i = 0; i < balls.length; i++)
             balls[i].color = "#" + newColor;
+        showElements();
+}
+
+function playersColor(newColor){
+    player1.color = player2.color = "#" + newColor;
+    
+    showElements();
 }
 
 function reseter(){
@@ -316,12 +338,18 @@ function reseter(){
 }
 
 function printScore() { //prints the score
-    var canvas = $('canvas')[0];
-    var context = canvas.getContext('2d');
-    var score = "Player 1 : " + player1.score + " - " + player2.score + " : Player 2";
+    var canvas, context, score1, score2;
+    
+    canvas = $('canvas')[0];
+    context = canvas.getContext('2d');
+    
+    score1 = player1.score;
+    score2 = ''+player2.score+'';
+    
     context.font = "50px Arial";
     context.fillStyle = "#fff";
-    context.fillText(score, board.w/2 - 210, board.y + 50);
+    context.fillText(score1 + 50, player1.x, board.y + 50);
+    context.fillText(score2, player2.x - 50, board.y + 50);
 }
 
 function update(difftime){
@@ -334,13 +362,7 @@ function update(difftime){
     
     if(player2.bot === true)
         player2Mode();
-    //If the bonus is given an other is placed after 3 seconds
-    if(bonus.destroyed === true){
-        setTimeout(function () {
-            bonus.init();
-            bonus.destroyed = false;
-        }, 1000 * 120) //after 2 minutes
-    }
+
     //free memory before creating new objects
     board.delete();
     player1.delete();
@@ -357,14 +379,25 @@ function update(difftime){
         if(balls[i].dead === false)
             balls[i].show();
     }
+    
     if(bonus.destroyed === false)
         bonus.show();
+    
     score();
     reseter();
 }
 
 let lastime;
 function game(time){
+    
+    //If the bonus is given an other is placed after 3 seconds
+    if(bonus.destroyed === true){
+        setTimeout(function () {
+            bonus.init();
+            bonus.destroyed = false;
+        }, 1000 * 120) //after 2 minutes
+    }
+    
     if(lastime && pause != true)
         update((time - lastime) /1000);
     lastime = time;

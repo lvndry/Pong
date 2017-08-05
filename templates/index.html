@@ -35,7 +35,7 @@
                     <div class="dashboard">
                     <!--@todo : Generate form with js -->  
                         <label>Dashboard</label>
-                        <select class="dashcolor" onchange="board.color = '#' + this.value;">
+                        <select class="dashcolor" onchange="boardColor(this.value);">
                             <option value="fff">White</option>
                              <option value="e60000">Red</option>
                              <option value="4286f4" selected>Blue</option>
@@ -58,7 +58,7 @@
                   </div>
                   <div class="player">
                       <label>Paddle</label>
-                        <select onchange="player1.color = player2.color = '#' + this.value;">
+                        <select onchange="playersColor(this.value);">
                           <option value="fff" selected>White</option>
                           <option value="e60000">Red</option>
                           <option value="4286f4">Blue</option>
@@ -74,8 +74,8 @@
                 <label for="second">2</label><input type="radio" value="2"  name="ball" id="second">
             </div>
             <div onchange="player2Mode();">
-                <label>Human vs Human</label><input type="radio" value="H" name="mode" checked>
-                <label>Human vs IA</label><input type="radio" value="I" name="mode">
+                <label>Human vs Human</label><input type="radio" value="H" name="mode">
+                <label>Human vs IA</label><input type="radio" value="I" name="mode" checked>
             </div>
         </aside> 
                  
@@ -122,6 +122,8 @@
                 
             player1.mouseEventHandler();
             
+            
+            var speed = 8;
             function player2Mode(){
                 var gameMode = $('input[name=mode]:checked').val();
                 console.log('GameMode : ' + gameMode);
@@ -132,12 +134,13 @@
                 else if(gameMode === 'I'){
                     player2.bot = true;
                         if(balls[0].xspeed > 0){
-                            if(player2.y < balls[0].y)
-                                player2.y += 4;
-                            if(player2.y > balls[0].y)
-                                player2.y -= 4;
+                            if(player2.y + 100 < balls[0].y)
+                                player2.y += speed;
+                            if(player2.y + 100 > balls[0].y)
+                                player2.y -= speed;
                         
                     }
+                    speed += 0.02;
                 }
             }
             player2Mode();
