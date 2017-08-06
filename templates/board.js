@@ -5,7 +5,7 @@ class Board{ //Class board == the background
         this.h = height;
         this.x = x;
         this.y = y;
-        this.color = "#4286f4";
+        this.color = "#4286f4"; //color blue
         this.context;
     }
      
@@ -24,7 +24,7 @@ class Board{ //Class board == the background
         return ctx; //returns the context where the board is created  
     }
     
-    show() {
+    show() { //prints the board on the screen
         var color = this.color;
         this.initBoard(color);
     }
@@ -37,8 +37,6 @@ class Board{ //Class board == the background
 }
 
 function createboard() { //Function that create a new board
-    var color;
-    
     const w = screen.width * 0.7;
     const h = screen.height * 0.75;
     const x = 30;

@@ -6,8 +6,8 @@ class Player{
         this.w = w_;
         this.h = h_;
         this.speed;
-        this.bot = false;
-        this.color = "#fff";;
+        this.bot = true; //says if IA mode or not
+        this.color = "#fff"; //white
         this.score = 0;
     }
     

@@ -6,12 +6,12 @@ class Ball { //Ball object
         this.xspeed = 700 * (Math.random() > 0.5 ? 1 : -1);
         this.yspeed = 700;
         this.radius = 20;
-        this.color = "#fff";
+        this.color = "#fff"; //white
         this.lastshooter = player1;
         this.dead = false;
     }
     
-    //getter for coordonates of the ball
+    //getter for sides of the ball
     get leftside() {
         return this.x - this.radius;
     }
@@ -61,14 +61,14 @@ class Ball { //Ball object
             this.yspeed *= -1;
         }
     
-        if((Math.abs(this.x - bonus.x) <= 64 || Math.abs(this.x - bonus.x - 64) <= 64) && (Math.abs(this.y - bonus.y) <= 64 || Math.abs(this.y - bonus.y + 64) <= 64) && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the radus of the circle it means that the objects collides
+        if((Math.abs(this.x - bonus.x) <= 64 || Math.abs(this.x - bonus.x - 64) <= 64) && (Math.abs(this.y - bonus.y) <= 64 || Math.abs(this.y - bonus.y + 64) <= 64) && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the size of the star it means that the objects collides
             bonus.destroyed = true;
             this.giveBonus();
-            //If the bonus is given an other is placed after 3 seconds
+            //If the bonus is given an other one is placed after 2 minutes
             setTimeout(function () {
                 bonus.destroyed = false;
                 bonus.init();
-            }, 1000 * 120) //after 2 minutes
+            }, 1000 * 120) //120 times one second == 2 minutes
             return true;
         }
      }
@@ -79,19 +79,19 @@ class Ball { //Ball object
         delete namespace.this;
     }
     
-    setFunctions(){
+    setFunctions(){ //set all the bonuses in an array
         bonusFunctions = [];
         bonusFunctions.push(extend);
         bonusFunctions.push(addScore);
     }
     
-    getBonus(){
+    getBonus(){ //return a randomly chosen function
         this.setFunctions();
         var bonusIndex = Math.floor(Math.random() * bonusFunctions.length); 
         return bonusFunctions[bonusIndex];  
     }
     
-    giveBonus(){
+    giveBonus(){ //gives the bonus to the last player that have shot
         var selectedBonus;
         
         selectedBonus = this.getBonus();
@@ -100,7 +100,7 @@ class Ball { //Ball object
     }
 }
 
-function createBalls(){
+function createBalls(){ //creates the wanted number of balls
     var pong;
     balls = []; //I make sure that the array is empty before creating the wanted number of balls
     var numOfBalls = $('input[name=ball]:checked').val();
@@ -111,7 +111,7 @@ function createBalls(){
     }
 } 
 
-function ballColor(newColor){
+function ballColor(newColor){ //Change the color of the balls
         for(var i = 0; i < balls.length; i++)
             balls[i].color = "#" + newColor;
         showElements();

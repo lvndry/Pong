@@ -2,6 +2,7 @@
   Pong game
   August 2017
 */
+
 html, body{
     height: 100%;
     margin: 0;
@@ -18,7 +19,7 @@ html, body{
     top : 15%;
 }
 
-#menu {
+#pause {
     text-align: center;
     font-size: 10em;
     vertical-align: baseline;
@@ -29,15 +30,15 @@ html, body{
     display: none;
 }
 
-#menu p:last-child {
+#pause p:last-child {
     margin-top: 1em;
-}
-
-footer {
-    position: absolute;
-    bottom: 0;
 }
 
 #numBall input{
     float: right;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
 }

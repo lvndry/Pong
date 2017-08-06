@@ -26,18 +26,20 @@
     </head>
     
      <body onkeydown="document.body.style.overflow='hidden';">
-          <div id="menu">
+          <div id="pause">
               <p>Pause</p>
               <p>||</p>
 
         </div>
+        
         <canvas class="game"> </canvas>
     
         <aside class="toolbox">
             <div class="color">
                 <h2>Color</h2>
                     <div class="dashboard">
-                    <!--@todo : Generate form with js -->  
+                    <!--@todo : Generate form with js -->
+                    <!-- Every time the value is changes the color also change so that you can have a preview (even if the game is paused) -->  
                         <label>Dashboard</label>
                         <select class="dashcolor" onchange="boardColor(this.value);">
                             <option value="fff">White</option>
@@ -73,11 +75,13 @@
                 </div> 
             </div>
             
-            <div id="numBall" onchange="createBalls();">
+            <h2>Number of balls</h2>
+            <div id="numBall" onchange="createBalls();"> <!-- You can play with 1 or 2 balls -->
                 <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked>
                 <label for="second">2</label><input type="radio" value="2"  name="ball" id="second">
             </div>
-            <div onchange="player2Mode();">
+            <h2>Game mode</h2>
+            <div onchange="player2Mode();"> <!-- You can play versus an IA or with a friend-->
                 <label>Human vs Human</label><input type="radio" value="H" name="mode">
                 <label>Human vs IA</label><input type="radio" value="I" name="mode" checked>
             </div>
@@ -105,12 +109,12 @@
             
             document.addEventListener("keydown", event =>{ //Stops the game if spacebar is pressed
                 if(event.keyCode == "32"){
-                    if($("#menu").css('display') == 'block'){
-                        $("#menu").hide();
+                    if($("#pause").css('display') == 'block'){
+                        $("#pause").hide();
                         pause = false;
                     }
                     else {
-                        $("#menu").show();
+                        $("#pause").show();
                         pause = true;
                     }
                 }
@@ -120,15 +124,12 @@
             
             createBalls();
             balls[0].setFunctions();
-            bonus.init();
-            bonus.show();
             game();
                 
-            player1.mouseEventHandler();
+            player1.mouseEventHandler(); //player 1 is always controlled with the mouse
             
-            
-            var speed = 8.5;
             function player2Mode(){
+                var speed = 8.5;
                 var gameMode = $('input[name=mode]:checked').val();
                 if(gameMode === 'H'){
                     player2.bot = false;
@@ -136,18 +137,22 @@
                 }
                 else if(gameMode === 'I'){
                     player2.bot = true;
-                        if(balls[0].xspeed > 0){
-                            if(player2.y + 100 < balls[0].y)
-                                player2.y += speed;
-                            if(player2.y + 100 > balls[0].y)
-                                player2.y -= speed; 
+                    
+                    if(balls[0].xspeed > 0){
+                        if(player2.y + 100 < balls[0].y)
+                            player2.y += speed;
+                        if(player2.y + 100 > balls[0].y)
+                            player2.y -= speed; 
                     }
                 }
             }
+            
             player2Mode();    
          </script>
          
          <footer>
+            <p>Created by Landry Monga</p>
+            <p>My github : <a href="https://github.com/lvndry">LVNDRY</a></p>
              <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
          </footer>
      </body> 

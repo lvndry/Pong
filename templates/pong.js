@@ -25,7 +25,7 @@ function score(){ //if the ball is above a paddle the other paddle get a point a
     }
 }
 
-function showElements(){
+function showElements(){ //prints the board, the player and all the balls in the screen
     board.show();
     player1.show();
     player2.show();
@@ -34,7 +34,14 @@ function showElements(){
         balls[i].show();
 }
 
-function reseter(){
+function destroyElements(){
+    board.delete();
+    player1.delete();
+    player2.delete();
+}
+
+function reseter(){ //get the ball in the center of the screen after all the balls 
+    
     for(var i = 0, len = balls.length; i < len; i++){
         if(balls[i].dead === false)
             return;
@@ -61,7 +68,7 @@ function printScore() { //prints the score
     context.fillText(score2, player2.x - 50, board.y + 50);
 }
 
-function update(difftime){
+function update(difftime){ //This functions is called every frame and prints elements in the screen
     for(var i = 0; i < balls.length; i++){
         balls[i].collide();
         
@@ -72,23 +79,14 @@ function update(difftime){
     if(player2.bot === true)
         player2Mode();
 
-    //free memory before creating new objects
-    board.delete();
-    player1.delete();
-    player2.delete();
+    //free memory before creating new objects by destroying board, players and the ball
+    destroyElements();
     
     for(var i = 0; i < balls.length; i++)
         balls[i].delete();
     
-    board.show();
+    showElements();
     printScore();
-    player1.show();
-    player2.show();
-    
-    for(var i = 0; i < balls.length; i++){
-        if(balls[i].dead === false)
-            balls[i].show();
-    }
     
     if(bonus.destroyed === false)
         bonus.show();
@@ -102,5 +100,5 @@ function game(time){
     if(lastime && pause != true)
         update((time - lastime) /1000);
     lastime = time;
-    window.requestAnimationFrame(game);    
+    window.requestAnimationFrame(game);
 }
