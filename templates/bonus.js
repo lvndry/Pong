@@ -22,7 +22,7 @@ class bonusCase {
 
         ctx = board.context;
         image = new Image();
-        image.src='../ressources/star.png';
+        image.src='ressources/star.png';
         pattern = ctx.createPattern(image, "no-repeat");
         ctx.fillStyle = pattern;
         ctx.rect(0, 0, board.w + board.x, board.h + board.y); //ctx.rext do not accept vriables. So that why I use translate
