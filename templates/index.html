@@ -123,7 +123,7 @@
             player1.mouseEventHandler();
             
             
-            var speed = 8;
+            var speed = 8.5;
             function player2Mode(){
                 var gameMode = $('input[name=mode]:checked').val();
                 if(gameMode === 'H'){
@@ -139,7 +139,7 @@
                                 player2.y -= speed;
                         
                     }
-                    speed += 0.02;
+                   //speed += 0.02;
                 }
             }
             player2Mode();
