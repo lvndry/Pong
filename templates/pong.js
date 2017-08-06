@@ -162,6 +162,11 @@ class Ball { //Ball object
         if((Math.abs(this.x - bonus.x) <= 64 || Math.abs(this.x - bonus.x - 64) <= 64) && (Math.abs(this.y - bonus.y) <= 64 || Math.abs(this.y - bonus.y + 64) <= 64) && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the radus of the circle it means that the objects collides
             bonus.destroyed = true;
             this.giveBonus();
+            //If the bonus is given an other is placed after 3 seconds
+            setTimeout(function () {
+                bonus.destroyed = false;
+                bonus.init();
+            }, 1000 * 120) //after 2 minutes
             return true;
         }
      }
@@ -344,11 +349,11 @@ function printScore() { //prints the score
     context = canvas.getContext('2d');
     
     score1 = player1.score;
-    score2 = ''+player2.score+'';
+    score2 = player2.score;
     
     context.font = "50px Arial";
     context.fillStyle = "#fff";
-    context.fillText(score1 + 50, player1.x, board.y + 50);
+    context.fillText(score1, player1.x, board.y + 50);
     context.fillText(score2, player2.x - 50, board.y + 50);
 }
 
@@ -375,6 +380,7 @@ function update(difftime){
     printScore();
     player1.show();
     player2.show();
+    
     for(var i = 0; i < balls.length; i++){
         if(balls[i].dead === false)
             balls[i].show();
@@ -388,16 +394,7 @@ function update(difftime){
 }
 
 let lastime;
-function game(time){
-    
-    //If the bonus is given an other is placed after 3 seconds
-    if(bonus.destroyed === true){
-        setTimeout(function () {
-            bonus.init();
-            bonus.destroyed = false;
-        }, 1000 * 120) //after 2 minutes
-    }
-    
+function game(time){    
     if(lastime && pause != true)
         update((time - lastime) /1000);
     lastime = time;
