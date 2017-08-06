@@ -7,6 +7,7 @@
 
 <html lang="en">
     <head>
+       
         <meta charset="utf-8">
         <title>Pong by Lvndry</title>
         <link rel="icon" href="../favicon.ico">
@@ -16,6 +17,10 @@
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.nanoscroller/0.8.7/css/nanoscroller.min.css" />
         
         <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+        <script src="ball.js"></script>
+        <script src="board.js"></script>
+        <script src="bonus.js"></script>
+        <script src="player.js"></script>
         <script src = 'pong.js'></script>
         
     </head>
@@ -136,10 +141,8 @@
                             if(player2.y + 100 < balls[0].y)
                                 player2.y += speed;
                             if(player2.y + 100 > balls[0].y)
-                                player2.y -= speed;
-                        
+                                player2.y -= speed; 
                     }
-                   //speed += 0.02;
                 }
             }
             player2Mode();
