@@ -8,15 +8,40 @@ html, body{
     margin: 0;
 }
 
+aside {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: box;
+}
+
 .toolbox {
-    background: white;
-    color: burlywood;
     position : absolute;
     float : right;
     padding: 2%;
     width: 250px;
     left: 75%;
     top : 15%;
+    background: #e8ebee;
+    color: burlywood;
+    font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+    text-align: center;
+}
+
+input {
+    display: inline-block;
+    position: relative;
+    transition: all 0.15s ease-out 0s;
+    margin: 10em;
+    border: none;
+    color: #fff;
+    cursor: pointer; 
+    outline: none;
+}
+
+label{
+    display: block;
+    margin: 2%;
 }
 
 #pause {
@@ -32,10 +57,6 @@ html, body{
 
 #pause p:last-child {
     margin-top: 1em;
-}
-
-#numBall input{
-    float: right;
 }
 
 footer {

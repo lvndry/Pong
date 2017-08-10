@@ -1,3 +1,8 @@
+/*Landry Monga
+  Pong game
+  August 2017
+*/
+
 class Board{ //Class board == the background
     
     constructor( x, y, width, height) {

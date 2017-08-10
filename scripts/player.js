@@ -1,3 +1,8 @@
+/*Landry Monga
+  Pong game
+  August 2017
+*/
+
 class Player{
     
     constructor(x_, y_, w_, h_){

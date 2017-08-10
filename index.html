@@ -10,8 +10,8 @@
        
         <meta charset="utf-8">
         <title>Pong by Lvndry</title>
+        
         <link rel="icon" href="favicon.ico">
-
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-ui-bootstrap/0.5pre/assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.nanoscroller/0.8.7/css/nanoscroller.min.css" />
@@ -26,10 +26,10 @@
     </head>
     
      <body onkeydown="document.body.style.overflow='hidden';">
-          <div id="pause">
-              <p>Pause</p>
-              <p>||</p>
-
+          
+        <div id="pause">
+            <p>Pause</p>
+            <p>||</p>
         </div>
         
         <canvas class="game"> </canvas>
@@ -77,13 +77,14 @@
             
             <h2>Number of balls</h2>
             <div id="numBall" onchange="createBalls();"> <!-- You can play with 1 or 2 balls -->
-                <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked>
-                <label for="second">2</label><input type="radio" value="2"  name="ball" id="second">
+                <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked> 
+                <label for="second">2</label><input type="radio" value="2"  name="ball" id="second"> 
             </div>
+            
             <h2>Game mode</h2>
             <div onchange="player2Mode();"> <!-- You can play versus an IA or with a friend-->
-                <label>Human vs Human</label><input type="radio" value="H" name="mode">
-                <label>Human vs IA</label><input type="radio" value="I" name="mode" checked>
+                <label>Human vs Human</label><input type="radio" value="H" name="mode"> 
+                <label>Human vs IA</label><input type="radio" value="I" name="mode" checked> 
             </div>
         </aside> 
                  
@@ -129,7 +130,7 @@
             player1.mouseEventHandler(); //player 1 is always controlled with the mouse
             
             function player2Mode(){
-                var speed = 8.5;
+                var speed = 8.7;
                 var gameMode = $('input[name=mode]:checked').val();
                 if(gameMode === 'H'){
                     player2.bot = false;
@@ -137,16 +138,24 @@
                 }
                 else if(gameMode === 'I'){
                     player2.bot = true;
-                    
-                    if(balls[0].xspeed > 0){
-                        if(player2.y + 100 < balls[0].y)
+                    for(var i = 0; i < balls.length; i++){
+                        if(balls[i].xspeed > 0){
+                            if(player2.y < balls[i].y)
                             player2.y += speed;
-                        if(player2.y + 100 > balls[0].y)
-                            player2.y -= speed; 
+                            if(player2.y + player2.h < balls[i].y)
+                            player2.y += speed;
+                            if(player2.y > balls[i].y)
+                            player2.y -= speed;
+                            if(player2.y - 100 > balls[i].y)
+                                player2.y -= speed;
+                        }
                     }
                 }
             }
-            
+            setTimeout(function(){
+                    bonus.destroyed = false;
+                    bonus.init();
+                }, 10 * 1000)
             player2Mode();    
          </script>
          

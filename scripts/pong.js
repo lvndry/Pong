@@ -96,7 +96,7 @@ function update(difftime){ //This functions is called every frame and prints ele
 }
 
 let lastime;
-function game(time){    
+function game(time){ //game loop 
     if(lastime && pause != true)
         update((time - lastime) /1000);
     lastime = time;
