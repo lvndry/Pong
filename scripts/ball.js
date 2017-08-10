@@ -73,7 +73,7 @@ class Ball { //Ball object
             setTimeout(function () {
                 bonus.destroyed = false;
                 bonus.init();
-            }, 1000 * 120) //120 times one second == 2 minutes
+            }, 1000 * 60) //60 times one second == 1 minute
             return true;
         }
      }
