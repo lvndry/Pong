@@ -62,11 +62,11 @@ class Ball { //Ball object
             this.yspeed *= 1.1;
             this.xspeed *= -1;
         }
-        if(this.y - this.radius < (board.y + 10) || this.y + this.radius > board.h){ //if it hits the bottom or the top of the screen
+        if( (this.y - this.radius) < (board.y + 10) || (this.y + this.radius) > board.h){ //if it hits the bottom or the top of the screen
             this.yspeed *= -1;
         }
     
-        if((Math.abs(this.x - bonus.x) <= 64 || Math.abs(this.x - bonus.x - 64) <= 64) && (Math.abs(this.y - bonus.y) <= 64 || Math.abs(this.y - bonus.y + 64) <= 64) && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the size of the star it means that the objects collides
+        if((Math.abs(this.x - bonus.x) <= 69 || Math.abs(this.x - bonus.x - 69) <= 69) && (Math.abs(this.y - bonus.y) <= 69 || Math.abs(this.y - bonus.y + 69) <= 69) && bonus.destroyed === false){ //if the distance beetween the center of the circle and the object is lower than the size of the star it means that the objects collides. 69 is the width of the star in pixel
             bonus.destroyed = true;
             this.giveBonus();
             //If the bonus is given an other one is placed after 2 minutes
@@ -107,6 +107,7 @@ class Ball { //Ball object
 
 function createBalls(){ //creates the wanted number of balls
     var pong;
+    
     balls = []; //I make sure that the array is empty before creating the wanted number of balls
     var numOfBalls = $('input[name=ball]:checked').val();
                 

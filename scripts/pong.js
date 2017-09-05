@@ -34,7 +34,7 @@ function showElements(){ //prints the board, the player and all the balls in the
         balls[i].show();
 }
 
-function destroyElements(){
+function destroyElements(){ //destroy all elements to free the memory
     board.delete();
     player1.delete();
     player2.delete();

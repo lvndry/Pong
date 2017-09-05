@@ -18,6 +18,13 @@ class Player{
     
     initPlayer(context, color){
         context.fillStyle = color;
+
+        if(this.y + this.h > board.h + board.y)
+            this.y = board.h + board.y - this.h - 10;
+
+          if(this.y < board.y)
+            this.y = board.y + 5;
+
         context.fillRect(this.x, this.y, this.w, this.h);
     }
     

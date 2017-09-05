@@ -15,7 +15,7 @@ class bonusCase {
     
     init(){
         min_x = player1.x + player1.w + 50; //the bonus can't be more in the left than the left of the board
-        max_x = player2.x - 64; //bonus case can't be more in the right than the right of the board
+        max_x = player2.x - 69; //bonus case can't be more in the right than the right of the board
         min_y = board.y + 20; //bonus case can't be higher than the top of screen
         max_y = board.y + board.h - 50; //bonus case can't be lower than the bottom of the screen
         this.x = Math.random() * (max_x - min_x) + min_x; //random x position of bonus case 

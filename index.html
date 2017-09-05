@@ -62,6 +62,7 @@
                           <option value ="2eb82e">Green</option>
                       </select>
                   </div>
+                  
                   <div class="player">
                       <label>Paddle</label>
                         <select onchange="playersColor(this.value);">
@@ -130,28 +131,31 @@
             player1.mouseEventHandler(); //player 1 is always controlled with the mouse
             
             function player2Mode(){
-                var speed = 8.7;
+                var speed = 8.76;
                 var gameMode = $('input[name=mode]:checked').val();
+                
                 if(gameMode === 'H'){
                     player2.bot = false;
                     player2.keyEventHandler();
                 }
+                
                 else if(gameMode === 'I'){
                     player2.bot = true;
                     for(var i = 0; i < balls.length; i++){
                         if(balls[i].xspeed > 0){
                             if(player2.y < balls[i].y)
-                            player2.y += speed;
-                            if(player2.y + player2.h < balls[i].y)
-                            player2.y += speed;
+                              player2.y += speed;
+                            if(player2.y + player2.h + 100 < balls[i].y)
+                              player2.y += speed;
                             if(player2.y > balls[i].y)
-                            player2.y -= speed;
+                              player2.y -= speed;
                             if(player2.y - 100 > balls[i].y)
-                                player2.y -= speed;
+                              player2.y -= speed;
                         }
                     }
                 }
             }
+            
             setTimeout(function(){
                     bonus.destroyed = false;
                     bonus.init();
