@@ -7,39 +7,39 @@
 
 <html lang="en">
     <head>
-       
+
         <meta charset="utf-8">
         <title>Pong by Lvndry</title>
-        
+
         <link rel="icon" href="favicon.ico">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-ui-bootstrap/0.5pre/assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.nanoscroller/0.8.7/css/nanoscroller.min.css" />
-        
+
         <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
         <script src="scripts/ball.js"></script>
         <script src="scripts/board.js"></script>
         <script src="scripts/bonus.js"></script>
         <script src="scripts/player.js"></script>
         <script src ="scripts/pong.js"></script>
-        
+
     </head>
-    
+
      <body onkeydown="document.body.style.overflow='hidden';">
-          
+
         <div id="pause">
             <p>Pause</p>
             <p>||</p>
         </div>
-        
+
         <canvas class="game"> </canvas>
-    
+
         <aside class="toolbox">
             <div class="color">
                 <h2>Color</h2>
                     <div class="dashboard">
                     <!--@todo : Generate form with js -->
-                    <!-- Every time the value is changes the color also change so that you can have a preview (even if the game is paused) -->  
+                    <!-- Every time the value is changes the color also change so that you can have a preview (even if the game is paused) -->
                         <label>Dashboard</label>
                         <select class="dashcolor" onchange="boardColor(this.value);">
                             <option value="fff">White</option>
@@ -50,7 +50,7 @@
                              <option value ="2eb82e">Green</option>
                          </select>
                     </div>
-                    
+
                     <div class="pong">
                         <label>Ball</label>
                         <select  onchange="ballColor(this.value);">
@@ -62,7 +62,7 @@
                           <option value ="2eb82e">Green</option>
                       </select>
                   </div>
-                  
+
                   <div class="player">
                       <label>Paddle</label>
                         <select onchange="playersColor(this.value);">
@@ -73,43 +73,44 @@
                           <option value="ffcc00">Yellow</option>
                           <option value ="2eb82e">Green</option>
                       </select>
-                </div> 
+                </div>
             </div>
-            
+
             <h2>Number of balls</h2>
             <div id="numBall" onchange="createBalls();"> <!-- You can play with 1 or 2 balls -->
-                <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked> 
-                <label for="second">2</label><input type="radio" value="2"  name="ball" id="second"> 
+                <label for="one">1</label><input type="radio"  value="1"  name="ball" id="one" checked>
+                <label for="second">2</label><input type="radio" value="2"  name="ball" id="second">
             </div>
-            
+
             <h2>Game mode</h2>
             <div onchange="player2Mode();"> <!-- You can play versus an IA or with a friend-->
-                <label>Human vs Human</label><input type="radio" value="H" name="mode"> 
-                <label>Human vs IA</label><input type="radio" value="I" name="mode" checked> 
+                <label>Human vs Human</label><input type="radio" value="H" name="mode">
+                <label>Human vs IA</label><input type="radio" value="I" name="mode" checked>
             </div>
-        </aside> 
-                 
+        </aside>
+
         <script>
-            var board = createboard();  //creation of the board === the background
-            var x, y, w, h, min_x, max_x, min_y, max_y; //coordonates of players
             var player1, player2;   //==> paddles
-            var pause = false;  //says if the game stops or not
-            var balls = []; //array of ball
-            var bonusFunctions = [];
-            
+            var x, y, w, h, min_x, max_x, min_y, max_y;    //coordonates of players
+            var balls = [];    //array of ball
+            var bonusFunctions = [];    //array of bonus funcions
+            var pause = false;    //says if the game stops or not
+
+            var board = createboard();    //creation of the board === the background
+
             w = 30;
             h = board.h * 0.3;
             x = board.x + 15;
             y = board.h/2 - (2 * board.y);
-            player1 = createPlayer(board, x, y, w, h);  //creation of letf player 
+            player1 = createPlayer(board, x, y, w, h);    //creation of letf player
 
             w = 30;
             h = board.h * 0.3;
             x = board.w - (board.x + 15);
             y = board.h/2 - (2 * board.y);
-            player2 = createPlayer(board, x, y, w, h);  //creation of right player
-            
-            document.addEventListener("keydown", event =>{ //Stops the game if spacebar is pressed
+            player2 = createPlayer(board, x, y, w, h);    //creation of right player
+
+            document.addEventListener("keydown", event =>{    //Stops the game if spacebar is pressed
                 if(event.keyCode == "32"){
                     if($("#pause").css('display') == 'block'){
                         $("#pause").hide();
@@ -121,52 +122,53 @@
                     }
                 }
             })
-            
-            var bonus = new bonusCase(); //new bonus case
-            
+
+            var bonus = new bonusCase();    //new bonus case
+
             createBalls();
             balls[0].setFunctions();
-            game();
-                
-            player1.mouseEventHandler(); //player 1 is always controlled with the mouse
             
+            game();
+
+            player1.mouseEventHandler();    //player 1 is always controlled with the mouse
+
             function player2Mode(){
-                var speed = 8.76;
+                var speed = 9.5;
                 var gameMode = $('input[name=mode]:checked').val();
-                
+
                 if(gameMode === 'H'){
                     player2.bot = false;
                     player2.keyEventHandler();
                 }
-                
+
                 else if(gameMode === 'I'){
                     player2.bot = true;
                     for(var i = 0; i < balls.length; i++){
                         if(balls[i].xspeed > 0){
                             if(player2.y < balls[i].y)
                               player2.y += speed;
-                            if(player2.y + player2.h + 100 < balls[i].y)
+                            if(player2.y + 50 < balls[i].y) //+50 is for the AI to act more naturales&Persephone
                               player2.y += speed;
                             if(player2.y > balls[i].y)
                               player2.y -= speed;
-                            if(player2.y - 100 > balls[i].y)
+                            if((player2.y + player2.h) - 50 > balls[i].y)
                               player2.y -= speed;
                         }
                     }
                 }
             }
-            
+
             setTimeout(function(){
                     bonus.destroyed = false;
                     bonus.init();
                 }, 10 * 1000)
-            player2Mode();    
+            player2Mode();
          </script>
-         
+
          <footer>
             <p>Created by Landry Monga</p>
             <p>My github : <a href="https://github.com/lvndry">LVNDRY</a></p>
              <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
          </footer>
-     </body> 
-</html> 
+     </body>
+</html>

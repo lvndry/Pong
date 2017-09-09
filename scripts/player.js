@@ -4,7 +4,7 @@
 */
 
 class Player{
-    
+
     constructor(x_, y_, w_, h_){
         this.x = x_;
         this.y = y_;
@@ -15,30 +15,30 @@ class Player{
         this.color = "#fff"; //white
         this.score = 0;
     }
-    
+
     initPlayer(context, color){
         context.fillStyle = color;
 
-        if(this.y + this.h > board.h + board.y)
-            this.y = board.h + board.y - this.h - 10;
+        if(this.y + this.h >= board.h + board.y)
+        this.y = (board.h + board.y) - (this.h + 15);
 
           if(this.y < board.y)
             this.y = board.y + 5;
 
         context.fillRect(this.x, this.y, this.w, this.h);
     }
-    
+
     mouseEventHandler() {  //player follows mouse mouvements
         var canvas = $('canvas')[0];
-        
+
         canvas.addEventListener("mousemove", event => {
             this.y = event.offsetY;
         })
     }
-    
+
     keyEventHandler(){ //player follows keymouvement
         var up = 40, down = 38;
-        
+
         document.addEventListener("keydown", event => {
             if(event.keyCode == up)
                 this.y += 30;
@@ -46,12 +46,12 @@ class Player{
                 this.y -= 30;
         })
     }
-    
+
     show(){
         var color = this.color; //color of player
-        this.initPlayer(board.context, color); 
+        this.initPlayer(board.context, color);
     }
-    
+
      delete(){ //destroy layer out of the screen
         var namespace = {};
         namespace.this = {};
@@ -63,7 +63,7 @@ function extend(shooter){
     shooter.h *= 2;
     setTimeout(function(){
         shooter.h /= 2;
-    }, 30 * 1000) //The lenght is doubled during 30 seconds 
+    }, 30 * 1000) //The lenght is doubled during 30 seconds
 }
 
 function addScore(shooter){
@@ -72,18 +72,18 @@ function addScore(shooter){
 
 function createPlayer(board, x, y, w, h) {
     var color, player;
-    
+
     color = "#fff"; //color of player
-    
+
     player = new Player(x, y, w, h);
     player.color = color;
     player.initPlayer(board.context, player.color);
-    
+
     return player;
 }
 
 function playersColor(newColor){
     player1.color = player2.color = "#" + newColor;
-    
+
     showElements();
 }
